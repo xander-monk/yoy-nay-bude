@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vmod>
+  <name>Save and Stay</name>
+  <version>1.0</version>
+  <description>Save and Stay button to Edit Order and Edit Product pages</description>
+  <author>Damyan Todorov</author>
+
+  <file name="admin/orders.app/edit_order.inc.php">
+
+    <operation method="replace" type="inline" onerror="warning">
+      <find><![CDATA[if (isset($_POST['save']))]]></find>
+
+      <insert><![CDATA[if (isset($_POST['save']) || isset($_POST['save_stay']))]]></insert>
+    </operation>
+
+    <operation method="replace" type="multiline" onerror="warning">
+      <find><![CDATA[
+if (!empty($_GET['redirect_url'])) {
+        $redirect_url = new ent_link($_GET['redirect_url']);
+        $redirect_url->host = '';
+      } else {
+        $redirect_url = document::link(WS_DIR_ADMIN, ['app' => $_GET['app'], 'doc' => 'orders']);
+      }
+      ]]></find>
+
+      <insert><![CDATA[
+if(isset($_POST['save_stay'])){
+    $redirect_url = basename($_SERVER['REQUEST_URI']);
+    }
+if(isset($_POST['save'])){
+        if (!empty($_GET['redirect_url'])) {
+        $redirect_url = new ent_link($_GET['redirect_url']);
+        $redirect_url->host = '';
+      } else {
+        $redirect_url = document::link(WS_DIR_ADMIN, ['app' => $_GET['app'], 'doc' => 'orders']);
+      }
+    }
+      ]]></insert>
+    </operation>
+
+    <operation method="after" type="inline" onerror="warning">
+      <find><![CDATA[<?php echo functions::form_draw_button('save', language::translate('title_save', 'Save'), 'submit', 'class="btn btn-success"', 'save'); ?>]]></find>
+
+      <insert><![CDATA[<?php echo functions::form_draw_button('save_stay', language::translate('title_save_stay', 'Save and stay'), 'submit', 'class="btn btn-success"', 'save'); ?>]]></insert>
+    </operation>
+  </file>
+
+  <file name="admin/catalog.app/edit_product.inc.php">
+
+    <operation method="replace" type="inline" onerror="warning">
+      <find><![CDATA[if (isset($_POST['save']))]]></find>
+
+      <insert><![CDATA[if (isset($_POST['save']) || isset($_POST['save_stay']))]]></insert>
+    </operation>
+
+    <operation method="replace" type="multiline" onerror="warning">
+      <find><![CDATA[
+header('Location: '. document::link(WS_DIR_ADMIN, ['app' => $_GET['app'], 'doc' => 'catalog', 'category_id' => $_POST['categories'][0]]));
+      ]]></find>
+
+      <insert><![CDATA[
+if (isset($_POST['save'])){
+header('Location: '. document::link(WS_DIR_ADMIN, ['app' => $_GET['app'], 'doc' => 'catalog', 'category_id' => $_POST['categories'][0]]));
+}
+if (isset($_POST['save_stay'])){
+header('Location: '. basename($_SERVER['REQUEST_URI']));
+}
+      ]]></insert>
+    </operation>
+
+    <operation method="after" type="multiline" onerror="warning">
+      <find><![CDATA[
+<?php echo functions::form_draw_button('save', language::translate('title_save', 'Save'), 'submit', 'class="btn btn-success"', 'save'); ?>
+      ]]></find>
+
+      <insert><![CDATA[
+<?php echo functions::form_draw_button('save_stay', language::translate('title_save_stay', 'Save'), 'submit', 'class="btn btn-success"', 'save'); ?>
+      ]]></insert>
+    </operation>
+  </file>
+</vmod>

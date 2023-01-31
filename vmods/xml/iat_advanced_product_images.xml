@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <id><![CDATA[Advanced Product Images for Admin]]></id>
+    <version><![CDATA[1.0]]></version>
+    <vqmver><![CDATA[2.4.0]]></vqmver>
+    <author><![CDATA[Ignacio Atencia]]></author>
+
+    <file name="admin/catalog.app/edit_product.inc.php">
+        <operation info="Advanced Product Images for Admin">
+            <search position="replace" offset="57"><![CDATA[
+<label><?php echo language::translate('title_images', 'Images'); ?></label>]]></search>
+            <add><![CDATA[
+ <?php include vmod::check(FS_DIR_ADMIN . $_GET['app'].'.app/product_imagebox.inc.php'); ?>
+]]></add>
+        </operation>
+  <operation info="Advanced Product Images for Admin">
+            <search position="replace" offset="61"><![CDATA[// Images]]></search>
+            <add><![CDATA[]]></add>
+        </operation>
+    </file>
+</modification>

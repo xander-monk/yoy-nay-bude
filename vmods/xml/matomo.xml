@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Matomo</id>
+  <version></version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>litecart.net</author>
+
+  <file name="includes/library/lib_document.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+    public static function before_capture() {
+      ]]></search>
+      <add><![CDATA[
+      if (!preg_match('#^('. preg_quote(WS_DIR_ADMIN, '#') .')#', $_SERVER['REQUEST_URI'])) {
+        matomo::doTrackPageView( parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) );
+      }
+      ]]></add>
+    </operation>
+  </file>
+</modification>

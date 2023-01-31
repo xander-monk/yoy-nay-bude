@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <id>OpenStreetMap - Set Regional Settings From Device Location</id>
+  <version>1.0</version>
+  <vqmver required="true">2.5.2</vqmver>
+  <author>TiM International</author>
+
+  <file name="includes/templates/default.catalog/pages/regional_settings.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+$('select[name="country_code"]').change(function(){
+      ]]></search>
+      <add><![CDATA[
+// Get location from device
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(position){
+    $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat='+ position.coords.latitude +'&lon='+ position.coords.longitude, function(data){
+      if (data.address.country_code) $('#box-regional-settings :input[name="country_code"]').val(data.address.country_code.toUpperCase()).trigger('change');
+      if (data.address.state) $('#box-regional-settings :input[name="zone_code"]').val($('#box-regional-settings :input[name="zone_code"] option').filter(function(){ return $(this).text() == data.address.state; }).val());
+      if (data.address.postcode && $('#box-regional-settings :input[name="postcode"]').val() == '') $('#box-regional-settings :input[name="postcode"]').val(data.address.postcode);
+    });
+  });
+}
+      ]]></add>
+    </operation>
+  </file>
+
+</modification>

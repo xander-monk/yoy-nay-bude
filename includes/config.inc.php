@@ -3,7 +3,6 @@
 ######################################################################
 ## Files and Directories #############################################
 ######################################################################
-
   define('BACKEND_ALIAS', 'admin');
 
 // File System
@@ -14,6 +13,7 @@
   define('FS_DIR_ADMIN',       FS_DIR_APP . BACKEND_ALIAS . '/');
 
 // Web System
+  define('WS_HOST',            'https://' . $_SERVER['HTTP_HOST'] . '/');
   define('WS_DIR_APP',         preg_replace('#^'. preg_quote(DOCUMENT_ROOT, '#') .'#', '', FS_DIR_APP));
   define('WS_DIR_STORAGE',     WS_DIR_APP);
   define('WS_DIR_ADMIN',       WS_DIR_APP . BACKEND_ALIAS . '/');
@@ -84,6 +84,12 @@
   define('DB_TABLE_USERS',                             '`'. DB_DATABASE .'`.`'. DB_TABLE_PREFIX . 'users`');
   define('DB_TABLE_ZONES',                             '`'. DB_DATABASE .'`.`'. DB_TABLE_PREFIX . 'zones`');
   define('DB_TABLE_ZONES_TO_GEO_ZONES',                '`'. DB_DATABASE .'`.`'. DB_TABLE_PREFIX . 'zones_to_geo_zones`');
+
+
+    define('MATOMO_SITE_ID', '4');
+    define('MATOMO_ENDPOINT', 'https://matomo.webbrain.pro/matomo.php');
+    define('MATOMO_AUTH_TOKEN', '9549ba735760099e5cbd08862473a1f5');
+    define('MATOMO_BULK_TRACKING', false); // Bulk tracking queues all events into one single request made before shutdown
 
 // Database tables (Add-ons)
   /* Your added tables here ... */

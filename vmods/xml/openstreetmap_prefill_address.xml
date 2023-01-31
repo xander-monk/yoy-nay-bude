@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <id>OpenStreetMap - Prefill Address From Device Location</id>
+  <version>1.0</version>
+  <vqmver required="true">2.5.2</vqmver>
+  <author>TiM International</author>
+
+  <file name="includes/templates/default.catalog/views/box_checkout_customer.inc.php">
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+        <?php echo functions::form_draw_text_field('lastname', true, 'required'); ?>
+      ]]></search>
+      <add><![CDATA[
+    <div class="form-group">
+      <button name="get_address_from_device" class="btn btn-default btn-block" type="button">
+        <?php echo functions::draw_fonticon('fa-location-arrow'); ?> <?php echo language::translate('text_prefill_address_from_current_location', 'Prefill address from your current location (wireless devices)'); ?>
+      </button>
+    </div>
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+  window.customer_form_checksum = $('#box-checkout-customer :input').serialize();
+      ]]></search>
+      <add><![CDATA[
+// Get address from device location
+  if (navigator.geolocation) {
+    $('button[name="get_address_from_device"]').click(function(){
+
+      navigator.geolocation.getCurrentPosition(function(position){
+        $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat='+ position.coords.latitude +'&lon='+ position.coords.longitude, function(data){
+          $(':input[name="address1"]').val((data.address.road || '') + (data.address.house_number ? ' '+ data.address.house_number : ''));
+          $(':input[name="city"]').val(data.address.city || data.address.town || data.address.village || '');
+          $(':input[name="country_code"]').val(data.address.country_code.toUpperCase() || '');
+          $(':input[name="zone_code"]').val(data.address.state || '');
+          $(':input[name="postcode"]').val(data.address.postcode || '');
+        }, function(){
+          alert('Failed getting address from device location');
+        });
+      }, function(error){
+        alert('Failed getting device location: '+ error.message);
+      });
+    });
+  } else {
+    $('button[name="get_address_from_device"]').closest('.form-group').remove();
+  }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/templates/default.catalog/pages/create_account.inc.php">
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+          <?php echo functions::form_draw_text_field('lastname', true, 'required'); ?>
+      ]]></search>
+      <add><![CDATA[
+      <div class="form-group">
+        <button name="get_address_from_device" class="btn btn-default btn-block" type="button">
+          <?php echo functions::draw_fonticon('fa-location-arrow'); ?> <?php echo language::translate('text_prefill_address_from_current_location', 'Prefill address from your current location (wireless devices)'); ?>
+        </button>
+      </div>
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+  if ($('select[name="country_code"] option:selected').data('tax-id-format')) {
+      ]]></search>
+      <add><![CDATA[
+// Get address from device location
+  if (navigator.geolocation) {
+    $('button[name="get_address_from_device"]').click(function(){
+
+      navigator.geolocation.getCurrentPosition(function(position){
+        $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat='+ position.coords.latitude +'&lon='+ position.coords.longitude, function(data){
+          $(':input[name="address1"]').val((data.address.road || '') + (data.address.house_number ? ' '+ data.address.house_number : ''));
+          $(':input[name="city"]').val(data.address.city || data.address.town || data.address.village || '');
+          $(':input[name="country_code"]').val(data.address.country_code.toUpperCase() || '');
+          $(':input[name="zone_code"]').val(data.address.state || '');
+          $(':input[name="postcode"]').val(data.address.postcode || '');
+        }, function(){
+          alert('Failed getting address from device location');
+        });
+      }, function(error){
+        alert('Failed getting device location: '+ error.message);
+      });
+    });
+  } else {
+    $('button[name="get_address_from_device"]').closest('.form-group').remove();
+  }
+      ]]></add>
+    </operation>
+  </file>
+
+</modification>

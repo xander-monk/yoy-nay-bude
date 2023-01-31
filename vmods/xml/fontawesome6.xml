@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Fontawesome 6</id>
+  <version></version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+  <file name="includes/library/lib_document.inc.php">
+    <operation error="log">
+      <search position="replace"><![CDATA[
+      self::$snippets['head_tags']['fontawesome'] = '<link rel="stylesheet" href="'. document::href_rlink(FS_DIR_APP .'ext/fontawesome/font-awesome.min.css') .'" />';
+      ]]></search>
+      <add><![CDATA[
+      self::$snippets['head_tags']['fontawesome6'] = '<link rel="stylesheet" href="'. document::href_rlink(FS_DIR_APP . 'ext/fontawesome6/css/v4-shims.min.css') .'">' . PHP_EOL
+                                                   . '<link rel="stylesheet" href="'. document::href_rlink(FS_DIR_APP . 'ext/fontawesome6/css/all.min.css') .'">';
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/functions/func_draw.inc.php">
+    <operation error="log">
+      <search position="replace" offset="3"><![CDATA[
+    // Fontawesome 4
+      ]]></search>
+      <add><![CDATA[
+    // Fontawesome 4
+      case (substr($class, 0, 3) == 'fa-'):
+        return draw_fonticon('fa '. $class, $parameters);
+
+    // Fontawesome 6
+      case (substr($class, 0, 6) == 'fa fa-'):
+      case (substr($class, 0, 7) == 'far fa-'):
+      case (substr($class, 0, 7) == 'fab fa-'):
+      case (substr($class, 0, 7) == 'fas fa-'):
+        return '<i class="'. $class .'"'. (!empty($parameters) ? ' ' . $parameters : '') .'></i>';
+      ]]></add>
+    </operation>
+  </file>
+</modification>

@@ -56,6 +56,11 @@ ErrorDocument 500 "Internal Server Error"
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -l
   RewriteRule ^ - [L]
+  
+    # Developer Kit
+    RewriteRule \.css$ handlers/less-scss-compiler.php [L]
+    RewriteRule \.js$ handlers/js-compressor.php [L]
+
 
   RewriteRule ^ index.php [QSA,L]
 </IfModule>
