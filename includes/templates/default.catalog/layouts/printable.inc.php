@@ -3,9 +3,7 @@
 <head>
 <title>{snippet:title}</title>
 <meta charset="{snippet:charset}" />
-<link rel="stylesheet" href="<?php echo document::href_rlink(FS_DIR_TEMPLATE . 'css/variables.css'); ?>" />
-<link rel="stylesheet" href="<?php echo document::href_rlink(FS_DIR_TEMPLATE . 'css/framework.min.css'); ?>" />
-<link rel="stylesheet" href="<?php echo document::href_rlink(FS_DIR_TEMPLATE . 'css/printable.min.css'); ?>" />
+<?php $_GET['styletype'] = 'printable';  include FS_DIR_APP . 'includes/templates/default.catalog/layouts/styles/less.inc.php'; ?>
 {snippet:head_tags}
 {snippet:style}
 </head>
